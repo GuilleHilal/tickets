@@ -53,7 +53,6 @@
     function llegoInvitado(id_inv){
         var url = 'https://sheet.best/api/sheets/854cf07d-67b0-4328-adf0-5f41c55fbb67/' + id_inv;
         var response = axios.patch(url,{'llego':'Si'});
-        console.log(response.status);
     }
     
     function getValidation(result){
@@ -65,8 +64,6 @@
                 var id_inv = parseInt(value[i].id) - 1 
                 var completo = value[i].completo;
                 var llego = value[i].llego;
-
-                console.log(completo)
                 
                 if(result == completo){
                     if(llego == 'No'){
@@ -94,7 +91,6 @@
     
     function checkResult(label, result) {
         scanner.stop();
-        console.log(result.data);
         updateInvitados();
         getValidation(result.data);
         
@@ -109,7 +105,7 @@
             camQrResult.style.color = 'inherit';
            
         },
-        maxScansPerSecond: 10,
+        maxScansPerSecond: 1,
         highlightScanRegion: true,
         highlightCodeOutline: true,
         

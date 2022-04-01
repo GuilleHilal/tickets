@@ -5,16 +5,11 @@
     <title>QR Scanner Demo</title>
 </head>
 <body>
-<h1>Scan from WebCam:</h1>
+
 <div id="video-container">
     <video id="qr-video"></video>
 </div>
-<div> 
-    <label>
-        <input id="show-scan-region" type="checkbox">
-        Show scan region canvas
-    </label>
-</div>
+
 <div>
     <button id="flash-toggle">📸 Flash </button>
 </div>
@@ -30,37 +25,46 @@
 <hr>
 
 
-
 <!--<script src="../qr-scanner.umd.min.js"></script>-->
 <!--<script src="../qr-scanner.legacy.min.js"></script>-->
 <script type="module">
-    import QrScanner from "../qr-scanner.min.js";
 
+
+
+
+    import QrScanner from "../qr-scanner.min.js";
+    
+    
     const video = document.getElementById('qr-video');
     const videoContainer = document.getElementById('video-container');
     const flashToggle = document.getElementById('flash-toggle');
     const camQrResult = document.getElementById('cam-qr-result');
     const camQrResultTimestamp = document.getElementById('cam-qr-result-timestamp');
-
+    
 
     function setResult(label, result) {
         console.log(result.data);
         label.textContent = result.data;
-        camQrResultTimestamp.textContent = new Date().toString();
-        label.style.color = 'teal';
-        clearTimeout(label.highlightTimeout);
-        label.highlightTimeout = setTimeout(() => label.style.color = 'inherit', 100);
+        scanner.stop()
+
+        //////////// LOGICA DIFICIL////////////////////
+
+        alert("La persona puede ingresar")
+        scanner.start()
+                
     }
+
 
     // ####### Web Cam Scanning #######
 
-    const scanner = new QrScanner(video, result => setResult(camQrResult, result), {
+    const scanner = new QrScanner(video, result => setResult(camQrResult, result),  {
         onDecodeError: error => {
             camQrResult.textContent = error;
             camQrResult.style.color = 'inherit';
         },
         highlightScanRegion: true,
         highlightCodeOutline: true,
+        sca
     });
 
 
@@ -100,6 +104,8 @@
 
     
 </script>
+
+
 
 <style>
     div {

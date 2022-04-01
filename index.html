@@ -39,78 +39,67 @@
     const flashToggle = document.getElementById('flash-toggle');
     const camQrResult = document.getElementById('cam-qr-result');
     const camQrResultTimestamp = document.getElementById('cam-qr-result-timestamp');
-    const invitados = axios.get('https://sheet.best/api/sheets/854cf07d-67b0-4328-adf0-5f41c55fbb67').then( response => {
+    var invitados = null
+
+    function updateInvitados(){
+        invitados = axios.get('https://sheet.best/api/sheets/854cf07d-67b0-4328-adf0-5f41c55fbb67').then( response => {
             if(response.status == 200) {console.log(response.data); return (response.data);} 
             else {throw "Respuesta incorrecta del servidor"}; return(fasle)});
+        
+            return(invitados);
+    
+    }
     
     function llegoInvitado(id_inv){
-        var url = 'https://sheet.best/api/sheets/854cf07d-67b0-4328-adf0-5f41c55fbb67/' + id_inv
-        var response = axios.patch(url,{'llego':'Si'})
-        console.log(response.status)
+        var url = 'https://sheet.best/api/sheets/854cf07d-67b0-4328-adf0-5f41c55fbb67/' + id_inv;
+        var response = axios.patch(url,{'llego':'Si'});
+        console.log(response.status);
     }
     
     function getValidation(result){
+
         invitados.then(function(value){
-        var flaggy = false
-        for (var i = 0; i < value.length; i++) { 
-            var id_inv = parseInt(value[i].id) - 1 
-            var completo = value[i].completo;
-            var llego = value[i].llego;
+            var flaggy = false
 
-            console.log(completo)
-            
-            if(result == completo){
-                if(llego == 'No'){
+            for (var i = 0; i < value.length; i++) { 
+                var id_inv = parseInt(value[i].id) - 1 
+                var completo = value[i].completo;
+                var llego = value[i].llego;
 
-                    flaggy = true
-                    i = value.length
-                    llegoInvitado(id_inv)
+                console.log(completo)
                 
-                }
-                else{
-                    alert('La persona YA HA INGRESADO!')
-                }
-                                }
-            };
+                if(result == completo){
+                    if(llego == 'No'){
 
-        if(flaggy){
-        alert("La persona puede ingresar")
+                        flaggy = true;
+                        i = value.length;
+                        llegoInvitado(id_inv);
+                    
+                    }
+                    else{
+                        alert('La persona YA HA INGRESADO!');
+                    }
+                                    }
+                };
+
+            if(flaggy){
+            alert("La persona puede ingresar");
+                }
+            else{
+                alert("La persona no puede ingresar");
             }
-        else{
-            alert("La persona no puede ingresar")
-        }
-        }
-        
-        )};
+            }
+            
+            )};
     
     function checkResult(label, result) {
         scanner.stop();
         console.log(result.data);
+        updateInvitados();
         getValidation(result.data);
         
         scanner.start();
         }
-
-//          axios.get('https://sheet.best/api/sheets/854cf07d-67b0-4328-adf0-5f41c55fbb67').then( response => {
-//             if(response.status == 200) {return response.data;} 
-//             else {throw "Respuesta incorrecta del servidor"}}).
-//         then( responseText => {
-//         const invitados = JSON.parse(responseText).results;
-//         console.log('Este es el objeto de invitados', invitados);
-// //   })
-//   .catch( err => {
-//     console.log(err);
-//   });
-
-        // const valid = getValidation(invitados);
-        // if(valid){alert("La persona puede ingresar")}
-        // scanner.stop()
-
-        
-
-        // scanner.start()
-                
-    // }
 
     // ####### Web Cam Scanning #######
 
@@ -118,12 +107,13 @@
         onDecodeError: error => {
             camQrResult.textContent = error;
             camQrResult.style.color = 'inherit';
+           
         },
+        maxScansPerSecond: 10,
         highlightScanRegion: true,
         highlightCodeOutline: true,
         
     });
-
 
     scanner.start();
 

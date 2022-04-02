@@ -70,6 +70,8 @@
                 var id_inv = value[i]['id_inv'] -1 ;
                 var completo = value[i].completo;
                 var llego = value[i].llego;
+                var nombre = value[i].nombre;
+                var apellido = value[i].apellido;
                 if(result == completo){
                     if(llego == 'No'){
 
@@ -85,7 +87,7 @@
                 };
 
             if(flaggy){
-            alert("La persona puede ingresar");
+            alert(apellido+ " "+ nombre +" puede ingresar");
                 }
             else{
                 alert("La persona no puede ingresar");
